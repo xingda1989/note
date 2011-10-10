@@ -1,0 +1,38 @@
+事务隔离级别
+read uncommitted(读未提交)
+可读取其他事务未提交的数据,会有脏读，不可重复读，幻读
+
+read committed  (读已提交)
+可读取已提交的数据，不可读取未提交数据，可避免脏读
+
+repeatable read (可重复读)
+可防止脏读，和不可重复读，但可能出现幻读。看不到其他事务或非事务的更新与删除，且无法在其他已删除的记录上
+做操作。但能看到插入操作，引起幻读。
+	
+serializable    (可串行化)
+花费代价最高，但最可靠的事务隔离级别，事务被处理为顺序执行，防止脏读，不可重复读和幻读
+
+
+查看当前会话隔离级别  select @@tx_isolation;
+
+查看系统当前隔离级别  select @@global.tx_isloation;
+
+设置当前会话隔离级别  set session transaction isolation level repeatable read;
+
+设置系统当前隔离级别  see global transaction ioslation level repeatable read;
+
+脏读理解：脏数据的读取，别入读取了那些事务未提交的数据，而之后事务回滚了，就出现了脏读。read committed及以上隔离级别	  能防止脏读的出现
+不可重复读理解：当一个事务在读取一些记录时，被其他事务或非事务执行更新了记录，结果出现前后读出的数据不一致，称为重复                读，repeatable read及以上隔离级别能防止不可重复读，但会出现幻读
+幻读理解：当一个事务查询记录时，最初的记录为10条，但之后被其他事务或非事务执行插入了记录，结果读出记录为11条，则出现          了幻读，serializable可防止幻读
+
+spring在TransactionDefinition接口中定义了七个事务传播行为
+PROPAGATION_REQUIRED -- 支持当前事务，如果当前没有事务，就新建一个事务。这是最常见的选择。 
+PROPAGATION_SUPPORTS -- 支持当前事务，如果当前没有事务，就以非事务方式执行。 
+PROPAGATION_MANDATORY -- 支持当前事务，如果当前没有事务，就抛出异常。 
+PROPAGATION_REQUIRES_NEW -- 新建事务，如果当前存在事务，把当前事务挂起。 
+PROPAGATION_NOT_SUPPORTED -- 以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。 
+PROPAGATION_NEVER -- 以非事务方式执行，如果当前存在事务，则抛出异常。 
+PROPAGATION_NESTED -- 如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则进行与
+
+具体可看以下链接：http://www.iteye.com/topic/78674
+	          http://www.iteye.com/topic/35907

@@ -1,0 +1,124 @@
+[Ctrl] + [Alt] + [F1] ~ [F6] ：文字接口登入 tty1 ~ tty6 终端机；
+[Ctrl] + [Alt] + [F7] ：图形接口桌面。
+[Ctrl] + [Alt] + [space] ：重启x window
+
+文本界面 run level 3   图形界面 run level 5
+
+指令过长是可以用反斜杠(\) 转义enter
+
+指令：
+ls -al  显示所有隐藏文件
+ll 命令等于 ls -l
+date +%Y/%m%d  2011/09/22
+date +%H:%M   11:06
+ctrl + c 是中断目前程序
+ctrl + d 可推出当前登录
+who 看目前有谁在线
+sync 将数据同步写入硬盘中的指令 
+shutdown 惯用的关机指令 (init 0)指令也可关机
+reboot halt poweroff 重新启动 关机  
+cat 读取档案内容并显示
+uname -r 查看核心版本信息
+lsb_release -a  查看lsb信息
+pwd：显示当前目录(Print Work Directory)
+mkdir：建立一个新目录
+mkdir -p test/test/test  加-p参数可建立多层目录
+mkdir -m 711 test  强制设定新建目录权限
+mkdir -- -foo  创建-开头的文件
+rmdir：删除一个空的目录
+rmdir -p test/test1/test2  可删除所有目录
+rm : 默认删除文件,不能删除目录
+rm -- -foo:删除-开头的目录
+rm -r : 可删除目录-r(recursive)
+echo $PATH 查看环境变量
+PATH="$PATH":/root  添加环境变量
+cp /test test  :默认拷贝他的属性 如权限等
+cp -a /test test : 加-a后可拷贝他的属性
+rename 
+cat tac nl more less 
+head -n  取前n行
+tail -n  取后n行
+file filename 查看文件类型等参数
+which [-a] filename 指令 指令搜索 这个指令是通过环境变量PATH设定的路径去寻找指令的
+whereis  locate 档案搜索 locate是依据/var/lib/mlolcate内的数据库记载，找出用户输入的关键词文件名，可用updatedb指令更新，而updatedb根据/etc/updatedb.conf的设定去搜寻系统硬盘内的文件名，并更新到/var/lib/mlocate
+groupadd groupname   添加群组
+df 列出文件系统整体磁盘使用量 他的读取范围主要在superblock中所以速度比较快
+du 他主要通过磁盘读取所以速度比较慢
+ln 硬链接(hard link)不能跨filesystem，不能link目录 例如：ln /etc/crontab .
+ln -s 符号链接(Symbolic Link 即快捷方式)
+dumpe2fs 查询每个区块与superblock的信息,先用df显示有那几个区块
+fdisk　磁盘分区　　fdisk -l 显示整个系统内搜索到的装置的partition均列出来
+当fdisk分区结束后系统提示需要重启，可以使用partprobe强制让核心重新读取一次partition table,就无需重启了
+mkfs 格式化partition   mke2fs是更详细的指令
+mount 挂载 mount -o remount,rw,auto /  重新挂载根目录
+umount 卸载
+磁盘参数修订：mknod    e2label   tune2fs    hdparm
+特殊装置的loop挂载 ：mount -o loop /root/centos5.3_x86_64.iso /mnt/centos_dvd   挂载光盘
+		     建立大档案以制作loop装置档案
+		     dd if=/dev/zero of=/home/loopdev bs=1M count=512   建立大型档案
+		     mkfs -t ext3 /home/loopdev       			格式化
+		     mount -o loop /home/loopdev /media/cdrom           挂载
+
+
+1 一般用户在shell环境中可以操作的指令或可执行文件 ===========(重要)
+2 系统核心可呼叫的凼数不工具等 
+3 一些常用的函数(function)或函数库(library)，大部分为C的函数库(libc) 
+4 装置档案的说明，通常在/dev下的档案 
+5 配置文件或者是某些档案的格式 ===========(重要)
+6 游戏(games) 
+7 惯例不协议等，例如Linux文件系统、网绚协议、ASCII code等等的说明 
+8 系统管理员可用的管理指令 ===========(重要)
+9 跟kernel有关的文件
+
+         读  写 执行 
+   -      r   w  x   r  -  x    r  w  -
+文件类型 {用户权限} {群组权限} {其他人权限}
+文件类型：[d] 目录
+	  [-] 普通文档
+	  [l] 连接文件(link file)
+	  [b] 表示装置文件里面的可供存储的接口设备(可随机存储装置)
+   	  [c] 表示装置文件里面的串行端口设备，例如键盘 鼠标(一次性读取装置)
+
+chgrp  :改变档案所属群组  chgrp [-r] group filename
+chown  :改变档案拥有者    chown [-r] owner[:group] filename
+chmod  :改变档案的权限SUID SGID SBIT等等的特性 chmod 777 filename    chmod u=rwx,g=rwx,o=rwx filename  
+					       chmod a-x filename   chmod u+w filename
+
+~:代表目前这个用户的主目录  如xingda登录 代表/home/xingda
+~xingda:代表xingda的主目录,可进入相应用户的主目录  /home/xingda
+
+建立档案默认为666  即：666   - rw- rw- rw-
+建立目录默认为777  即：777   d rwx rwx rwx
+umask 命令可改变默认新建档案和目录的权限
+如 umask 022  则默认拿掉权限为 - --- -w- -w-  即拿掉群组和其他人写的权限
+新建档案的权限为：- rw- r-- r--
+新建目录的权限为：- rwx r-x r-x  (注：不是666与022直接相减)
+
+chattr +i filename  添加了权限，文件不能被删除。取消权限 chattr -i fill
+lsattr filename  显示隐藏属性
+
+档案特殊权限 ：SUID SGID SBIT 第七章初步  十七章进一步介绍
+SUID对于二进制程序
+SGID对于目录或文档
+SBIT对于目录
+
+inode为128byte
+一个block号码4byte(block 大小仅为1kb,2kb,4kb 三种而已)
+inode的号码区定义为12个直接区，一个间接区，一个双间接区，一个三间接区
+上述可计算最大单一文档限制,假设block大小为1kb,最大单一文档=12*1kb + 256*1kb + 256*256*1kb + 256*256*256*1kb 约为16GB
+但上述方法不适用于2k,4kblock大小的计算，因为大于2kb的block将会受到Ext2文件系统本身的限制
+通过dumpe2fs命令查看,假设inode table分布于629-1641的block号码中,由于一个inode占用128byte,总共有1641-629+1=1013个block花在inode table上，又假设每个block大小为4kb，则inode总数=1013*4096/128=32416个node
+
+superblock大小为1024bytes
+block bitmap(区块对照表)功能查看使用或未使用的block号码
+inode bitmap(inode对照表)查看使用或未使用的inode号码
+
+inode本身不记录文件名，文件名的记录是在目录的block当中(block中记录目录下的文件名和对应的inode号)
+所以在新增/删除/更名文件名与目录的w权限有关(因为要在目录的block当中添加/删除/修改文件名与inode号码)
+一般我们将inode table与打他 block称为数据存放区，至于其他例如superblock,block bitmap,inode bitmap等区段称为metadata(中介资料)
+filesystem 最顶层的目录inode一般为2号
+
+/dev/shm目录是利用内存虚拟出来的磁盘空间，由于是透过内存仿真出来的内存空间所以在这个目录下建立的数据，访问速度非常快，他的大小由各主机而定。而建立的东西下次开机时就消失了，因为是在内存中
+
+此频道使用必需经过:分隔,格式化,与挂载,分别惯用的指令为:fdisk,mkfs,mount
+开机自动挂载可参考/etc/fstab/之设定，设定完毕务必使用mount -a测试语法正确与否
