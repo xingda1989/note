@@ -1,0 +1,12 @@
+i  进入编辑模式
+esc  退出到normal模式
+: 进入命令行模式
+:w  写入保存
+:wq 保存并退出
+:e aaa.txt  打开另一个文件
+
+:sy on 打开语法加亮 sy语法加亮 on打开
+:sy clear 取消语法加亮
+:set go=  取消工具栏  set设置 go (gui option)缩写
+:colo evening  设置配色方案   colo tab键查看这些配色方法
+:newtab filename  打开新标签
